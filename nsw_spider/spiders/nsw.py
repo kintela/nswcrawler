@@ -12,10 +12,7 @@ def oportunidad_info(response,value):
 class NswSpider(Spider):
     name = 'nsw'
     allowed_domains = ['nsw.gov.au']
-    #start_urls =['https://tenders.nsw.gov.au/rms/?event=public.RFT.list']
-
-    def __init__(self,category):
-        self.start_urls=[category]
+    start_urls =['https://tenders.nsw.gov.au/rms/?event=public.RFT.list']    
 
     def parse(self, response):
         oportunidades=response.xpath('//h2/a/@href').extract()
