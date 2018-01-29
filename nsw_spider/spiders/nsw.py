@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from scrapy import Spider
 from scrapy.http import Request
+import os
+import csv
+import glob
+from openpyxl import Workbook
 
 def oportunidad_info(response,value):
     return response.xpath('//strong[text()="' + value + '"]/ancestor::node()[2]/span/text()').extract_first()
@@ -48,3 +52,16 @@ class NswSpider(Spider):
             'Agencia':agencia,
             'Persona_Contacto':persona_contacto
         }
+
+    def close(self,reason):
+        csv_file=max(glob.iglob('*.csv'),key=os.path.getctime)
+
+        wb=Workbook()
+        ws=wb.active
+
+        with open(csv_file,'r') as f:
+            for row in csv.reader(f):
+                ws.append(row)
+
+        wb.save(csv_file.replace('.csv','')+ '.xlsx')
+
